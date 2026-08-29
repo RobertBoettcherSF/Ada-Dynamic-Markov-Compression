@@ -4,8 +4,13 @@ package Dynamic_Markov_Compression is
 
    -- Core Types for DMC
    type Bit is range 0 .. 1;
-   type State_ID is new Integer;
+   
+   -- Bounded to prevent Ada.Containers.Vectors Count_Type overflow
+   type State_ID is new Integer range -1 .. 10_000_000;
    Null_State : constant State_ID := -1;
+
+   -- Vector instantiation requires a non-negative start index
+   subtype Node_Index is State_ID range 0 .. State_ID'Last;
 
    type Bit_Array is array (Bit) of State_ID;
    type Count_Array is array (Bit) of Natural;
@@ -17,7 +22,7 @@ package Dynamic_Markov_Compression is
    end record;
 
    package Node_Vectors is new Ada.Containers.Vectors
-     (Index_Type => State_ID, Element_Type => Node);
+     (Index_Type => Node_Index, Element_Type => Node);
 
    -- Variants: Standard DMC starts single state, some implementations use Order-0 (255 nodes)
    type Initialization_Variant is (Single_State, Order_Zero);
