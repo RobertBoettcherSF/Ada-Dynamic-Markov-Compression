@@ -7,10 +7,13 @@ package Dynamic_Markov_Compression is
    type State_ID is new Integer;
    Null_State : constant State_ID := -1;
 
+   type Bit_Array is array (Bit) of State_ID;
+   type Count_Array is array (Bit) of Natural;
+
    -- A Node represents a state in the Markov Model
    type Node is record
-      Next_State : array (Bit) of State_ID := (others => 0);
-      Counts     : array (Bit) of Natural := (others => 1);
+      Next_State : Bit_Array := (others => 0);
+      Counts     : Count_Array := (others => 1);
    end record;
 
    package Node_Vectors is new Ada.Containers.Vectors
